@@ -14,7 +14,7 @@ class QRScannerController: UIViewController {
     @IBOutlet var messageLabel:UILabel!
     @IBOutlet var topbar: UIView!
     
-    var captureSession: AVCaptureSession?
+    var captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     var qrCodeFrameView: UIView?
     
@@ -30,16 +30,16 @@ class QRScannerController: UIViewController {
         
         do {
             let input = try AVCaptureDeviceInput(device: captureDevice)
-            captureSession?.addInput(input)
+            captureSession.addInput(input)
             
             // Specify Session Output
             let captureMetadataOutput = AVCaptureMetadataOutput()
-            captureSession?.addOutput(captureMetadataOutput)
+            captureSession.addOutput(captureMetadataOutput)
             captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
             
             // Specify Preview Layer to see video on screen
-            videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
+            videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
             videoPreviewLayer?.frame = view.layer.bounds
             view.layer.addSublayer(videoPreviewLayer!)
@@ -47,7 +47,7 @@ class QRScannerController: UIViewController {
             view.bringSubview(toFront: topbar)
             
             // Start Session
-            captureSession?.startRunning()
+            captureSession.startRunning()
             
             // Green box
             qrCodeFrameView = UIView()
